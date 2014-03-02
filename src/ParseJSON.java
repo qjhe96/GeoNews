@@ -1,7 +1,7 @@
-import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.annotations.SerializedName;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class ParseJSON {
 
@@ -11,6 +11,15 @@ public class ParseJSON {
 	
 	public ParseJSON(String output){
 		this.output = output;	
+	}
+	
+	public double[] parseLatLong() throws JSONException {
+		JSONObject locationObj = new JSONObject(this.output);
+		JSONArray results = locationObj.getJSONArray("results");
+		JSONObject firstResult = results.getJSONObject(0);
+		JSONObject geometry = firstResult.getJSONObject("geometry");
+		JSONObject location = geometry.getJSONObject("location");
+		return new double[]{location.getDouble("lat"), location.getDouble("lng")};
 	}
 	
 	public String[] parseCoordinate(String s){
